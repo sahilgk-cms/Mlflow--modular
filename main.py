@@ -7,6 +7,7 @@ from training.search_space_factory import SearchSpaceFactory
 from training.eval_factory import MetricFactory
 from training.trainer import TimeSeriesTrainer
 from training.optimizer import OptunaOptimizer
+from training.cv_factory import CVFactory
 from models.factory import ModelFactory
 from datetime import datetime
 import mlflow
@@ -73,6 +74,7 @@ def main():
         log_parquet(df = train_df, filename=TRAIN_PATH, artifact_path="data")
         log_parquet(df=test_df, filename=TEST_PATH, artifact_path="data")
 
+        tscv = CVFactory()
         tscv = TimeSeriesSplit(n_splits=N_CV_SPLITS)
 
         optimization_metric = MetricFactory.get_optimize_metric(MODEL_NAME)
