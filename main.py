@@ -74,8 +74,7 @@ def main():
         log_parquet(df = train_df, filename=TRAIN_PATH, artifact_path="data")
         log_parquet(df=test_df, filename=TEST_PATH, artifact_path="data")
 
-        tscv = CVFactory(cv_type = CV_TYPE)
-    
+        tscv = CVFactory.create(cv_type = CV_TYPE)
 
         optimization_metric = MetricFactory.get_optimize_metric(MODEL_NAME)
         eval_metrics = MetricFactory.get_eval_metrics(MODEL_NAME)
