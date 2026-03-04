@@ -87,7 +87,7 @@ def main():
             cat_feature_indices=cat_feature_indices
         )
 
-        final_model, best_cv_rmse, best_params, training_run_id = run_training_pipeline(X_train=X_train_preprocessed,
+        final_model, best_cv_score, best_params, training_run_id = run_training_pipeline(X_train=X_train_preprocessed,
                                                                   y_train=y_train,
                                                                   param_space_fn=param_space_function,
                                                                   model_cls=model_cls,
@@ -95,7 +95,7 @@ def main():
                                                                   cv=tscv,
                                                                   trainer_cls=TimeSeriesTrainer,
                                                                   optimizer_cls=OptunaOptimizer,
-                                                                  metric_fn=metric_fn,
+                                                                  optimization_metric=optimization_metric,
                                                                   model_name=MODEL_NAME,
                                                                   run_type=TRAINING_RUN_TYPE,
                                                                   cv_name=CV_TYPE,
@@ -112,8 +112,8 @@ def main():
                                 y_test = y_test,
                                 X_test_meta=X_test_meta,
                                 model = final_model,
-                                metric_fn=metric_fn,
-                                best_cv_rmse=best_cv_rmse,
+                                eval_metric=eval_metric,
+                                best_cv_score=best_cv_score,
                                 predictions_path=PREDICTIONS_PATH,
                                 model_name=MODEL_NAME,
                                 run_type=EVALUATION_RUN_TYPE,
