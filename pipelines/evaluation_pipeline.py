@@ -33,12 +33,11 @@ def run_evaluation_pipeline(
             mlflow.log_metric(f"test_{metric.name}", value)
             metric_results[metric.name] = value
 
-        predictions_df = build_prediction_data(
-            predictions=predictions,
-            X_test_meta=X_test_meta,
-            best_cv_score=best_cv_score,
-            test_metrics=metric_results,
-        )
+       predictions_df = build_prediction_data(predictions,
+                                               X_test_meta,
+                                               best_cv_rmse,
+                                               test_score,
+                                               metric_name=metric_spec.name)
 
         log_parquet(
             df=predictions_df,
