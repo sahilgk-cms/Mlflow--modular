@@ -76,7 +76,7 @@ def main():
         tscv = TimeSeriesSplit(n_splits=N_CV_SPLITS)
 
         optimization_metric = MetricFactory.get_optimize_metric(MODEL_NAME)
-        eval_metrics = MetricFactory.get_eval_metric(MODEL_NAME)
+        eval_metrics = MetricFactory.get_eval_metrics(MODEL_NAME)
 
         param_space_function = SearchSpaceFactory.get_search_space(
             model_name=MODEL_NAME,
