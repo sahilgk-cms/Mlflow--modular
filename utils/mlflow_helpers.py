@@ -16,7 +16,9 @@ def register_model_with_data_tags(training_run_id: str,
                                   model_name: str,
                                   train_data_hash: str,
                                   test_data_hash: str,
-                                  pipeline_root_run_id: str) -> mlflow.entities.model_registry.model_version.ModelVersion:
+                                  pipeline_root_run_id: str,
+                                  preprocessor_name: str,
+                                  ) -> mlflow.entities.model_registry.model_version.ModelVersion:
 
     model_uri = f"runs:/{training_run_id}/model"
     mv = mlflow.register_model(model_uri=model_uri, name=model_name)
@@ -40,6 +42,13 @@ def register_model_with_data_tags(training_run_id: str,
         version=mv.version,
         key="pipeline_root_run_id",
         value=pipeline_root_run_id
+    )
+
+    client.set_model_version_tag(
+        name=model_name,
+        version=mv.version,
+        key="preprocessor_name",
+        value=preprocessor_name
     )
     return mv
 
@@ -84,8 +93,8 @@ def load_train_test_data(model_name: str, version: int) -> dict:
     )
 
     return {
-        file.name: pd.read_csv(file)
-        for file in Path(local_path).glob("*.csv")
+        file.name: pd.read_parquet(file)
+        for file in Path(local_path).glob("*.parquet")
     }
 
 def load_predictions(model_name: str, version: int) -> Dict[str, pd.DataFrame]:
@@ -107,6 +116,6 @@ def load_predictions(model_name: str, version: int) -> Dict[str, pd.DataFrame]:
         artifact_path="predictions"
         )
     return {
-        file.name: pd.read_csv(file)
-        for file in Path(local_path).glob("*.csv")
+        file.name: pd.read_parquet(file)
+        for file in Path(local_path).glob("*.parquet")
     }
