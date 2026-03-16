@@ -82,3 +82,14 @@ Mlflow--modular
 ├── run_pipeline.sh
 └── uv.lock
 ```
+
+## Running the pipeline
+- First ensure Docker Daemon is running. 
+- Go to the project folder on Linux/WSL/Bash. Make the shell script executable
+```
+chmod +x run_pipeline.sh
+```
+- Run the shell script.
+  ```
+  ./run_pipeline.sh
+  ```
