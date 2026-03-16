@@ -1,16 +1,14 @@
 import pandas as pd
 import mlflow
-from config import *
-from data.prediction_builder import build_prediction_data
+from pipelines.prediction_builder import build_prediction_data
 from utils.artifact_logger import log_parquet
-from training.metric_factory import MetricSpec
+from metrics.factory import MetricFactory
 
 def run_evaluation_pipeline(
             X_test: pd.DataFrame,
             y_test: pd.Series,
             X_test_meta: pd.DataFrame,
             model,
-            eval_metrics: list[MetricSpec],
             best_cv_score: float,
             predictions_path: str,
             model_name: str,
@@ -26,18 +24,24 @@ def run_evaluation_pipeline(
         })
 
         predictions = model.predict(X_test)
+        eval_metrics = MetricFactory.get_eval_metrics(model_name)
 
-        metric_results = {}
+        eval_metric_results = {}
         for metric in eval_metrics:
             value = metric.fn(y_test, predictions)
             mlflow.log_metric(f"test_{metric.name}", value)
-            metric_results[metric.name] = value
+            eval_metric_results[metric.name] = value
 
-       predictions_df = build_prediction_data(predictions,
+        # choose primary metric
+        primary_metric = eval_metrics[0].name
+        test_score = eval_metric_results[primary_metric]
+
+
+        predictions_df = build_prediction_data(predictions,
                                                X_test_meta,
-                                               best_cv_rmse,
+                                               best_cv_score,
                                                test_score,
-                                               metric_name=metric_spec.name)
+                                               metric_name=primary_metric)
 
         log_parquet(
             df=predictions_df,
@@ -45,4 +49,4 @@ def run_evaluation_pipeline(
             artifact_path="predictions",
         )
 
-        return metric_results
+        return eval_metric_results
