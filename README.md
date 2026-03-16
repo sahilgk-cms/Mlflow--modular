@@ -82,6 +82,12 @@ Mlflow--modular
 ├── run_pipeline.sh
 └── uv.lock
 ```
+## Environment variables
+- `DB_HOST`
+- `DB_NAME`
+- `DB_USER`
+- `DB_PASSWORD`
+- `DB_PORT`
 
 ## Running the pipeline
 - First ensure Docker Daemon is running. 
