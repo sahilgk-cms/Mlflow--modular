@@ -93,3 +93,4 @@ chmod +x run_pipeline.sh
   ```
   ./run_pipeline.sh
   ```
+The MLFlow server starts running on http://localhost:5000
