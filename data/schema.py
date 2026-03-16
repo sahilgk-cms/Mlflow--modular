@@ -1,0 +1,5 @@
+DATE_COL = "week_start"
+CUTOFF_WEEK = 16
+TARGET_COL = "Case_Count_next_week"
+DISTRICT_COL = "dist_name"
+TEST_META_COLS = [DATE_COL, DISTRICT_COL, TARGET_COL]
